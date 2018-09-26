@@ -16,6 +16,7 @@ using Microsoft.Kinect;
 using System.IO;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using System.Media;
 
 namespace ChasingColors
 {
@@ -28,10 +29,38 @@ namespace ChasingColors
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        struct Obj
+        {
+            public double dPosX;
+            public double dPosY;
+            public double dAlto;
+            public double dAncho;
+        }
+
+        Obj O1, O2, O3, O4, O5, O6, O7, O8;
+        Obj MR, ML;
+
+        int Puntaje = 0;
+
+        private bool checarColision(Obj ob1, Obj ob2)
+        {
+            if (ob1.dPosX + ob1.dAncho < ob2.dPosX)     //Colisión	por	la	izquierda	de	ob2
+                return false;
+            if (ob1.dPosY + ob1.dAlto < ob2.dPosY)      //Colisión	por	arriba	de	ob2
+                return false;
+            if (ob1.dPosY > ob2.dPosY + ob2.dAlto)      //Colisión	por	abajo	ob2
+                return false;
+            if (ob1.dPosX > ob2.dPosX + ob2.dAncho) //Colisión	por	la	derecha	ob2
+                return false;
+            return true;
+        }
+
+
         private KinectSensor miKinect;  //Representa el Kinect conectado
         DispatcherTimer timerPuntos;
         TimeSpan timeSpan = new TimeSpan();
-      //  DoubleAnimation[] animations = new DoubleAnimation[6];
+        //  DoubleAnimation[] animations = new DoubleAnimation[6];
         Random random = new Random();
         int timeSpanMS;
         /* ----------------------- Área para las variables ------------------------- */
@@ -63,6 +92,37 @@ namespace ChasingColors
             puntoActual = 0;
             setPuntos();
             Kinect_Config();
+
+            O1.dAlto = puntos[0].Height;
+            O1.dAncho = puntos[0].Width;
+
+            O2.dAlto = puntos[1].Height;
+            O2.dAncho = puntos[1].Width;
+
+            O3.dAlto = puntos[2].Height;
+            O3.dAncho = puntos[2].Width;
+
+            O4.dAlto = puntos[3].Height;
+            O4.dAncho = puntos[3].Width;
+
+            O5.dAlto = puntos[4].Height;
+            O5.dAncho = puntos[4].Width;
+
+            O6.dAlto = puntos[5].Height;
+            O6.dAncho = puntos[5].Width;
+
+            O7.dAlto = puntos[6].Height;
+            O7.dAncho = puntos[6].Width;
+
+            O8.dAlto = puntos[7].Height;
+            O8.dAncho = puntos[7].Width;
+
+            MR.dAlto = PunteroR.Height;
+            MR.dAncho = PunteroR.Width;
+
+            ML.dAlto = PunteroL.Height;
+            ML.dAncho = PunteroL.Width;
+
         }
 
         private void reaparecerPunto(Ellipse punto)
@@ -73,12 +133,12 @@ namespace ChasingColors
 
         private void initAnimations()
         {
-          /*  animations[0] = new DoubleAnimation();
-            animations[1] = new DoubleAnimation();
-            animations[2] = new DoubleAnimation();
-            animations[3] = new DoubleAnimation();
-            animations[4] = new DoubleAnimation();
-            animations[5] = new DoubleAnimation();*/
+            /*  animations[0] = new DoubleAnimation();
+              animations[1] = new DoubleAnimation();
+              animations[2] = new DoubleAnimation();
+              animations[3] = new DoubleAnimation();
+              animations[4] = new DoubleAnimation();
+              animations[5] = new DoubleAnimation();*/
         }
 
         private void reacomodarPunto(int puntoIndex, int ms)
@@ -89,16 +149,52 @@ namespace ChasingColors
             Ellipse punto = puntos[puntoIndex];
 
             punto.Opacity = 1;//SetValue(Canvas.OpacityProperty, );
-    
+
             double newX = random.Next(0, (int)(MainCanvas.Width - punto.Width));
             double newY = random.Next(0, (int)(MainCanvas.Height - punto.Height));
             punto.SetValue(Canvas.LeftProperty, newX);
             punto.SetValue(Canvas.TopProperty, newY);
-            
+
+            switch (puntoIndex)
+            {
+                case 0:
+                    O1.dPosX = newX;
+                    O1.dPosY = newY;
+                    break;
+                case 1:
+                    O2.dPosX = newX;
+                    O2.dPosY = newY;
+                    break;
+                case 2:
+                    O3.dPosX = newX;
+                    O3.dPosY = newY;
+                    break;
+                case 3:
+                    O4.dPosX = newX;
+                    O4.dPosY = newY;
+                    break;
+                case 4:
+                    O5.dPosX = newX;
+                    O5.dPosY = newY;
+                    break;
+                case 5:
+                    O6.dPosX = newX;
+                    O6.dPosY = newY;
+                    break;
+                case 6:
+                    O7.dPosX = newX;
+                    O7.dPosY = newY;
+                    break;
+                case 7:
+                    O8.dPosX = newX;
+                    O8.dPosY = newY;
+                    break;
+            }
+
             if (punto.Opacity == 1)
             {
                 DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
-              //  animations[puntoIndex] = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
+                //  animations[puntoIndex] = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
                 animation.FillBehavior = FillBehavior.Stop;
                 punto.BeginAnimation(Ellipse.OpacityProperty, animation);
             }
@@ -115,10 +211,10 @@ namespace ChasingColors
         private void setPuntos()
         {
             puntos[0] = red1;
-            puntos[1] = red2;
-            puntos[2] = red3;
-            puntos[3] = blue1;
-            puntos[4] = red2;
+            puntos[1] = blue1;
+            puntos[2] = red2;
+            puntos[3] = blue2;
+            puntos[4] = red3;
             puntos[5] = blue3;
             puntos[6] = red4;
             puntos[7] = blue4;
@@ -164,6 +260,8 @@ namespace ChasingColors
                 // Modificar coordenadas del indicador que refleja el movimiento (Ellipse rojo)
                 PunteroR.SetValue(Canvas.TopProperty, dMano_Y - 12.5);
                 PunteroR.SetValue(Canvas.LeftProperty, dMano_X - 12.5);
+                MR.dPosX = dMano_X;
+                MR.dPosY = dMano_Y;
 
                 // Indicar Id de la persona que es trazada
                 LID.Content = skeleton.TrackingId;
@@ -179,10 +277,118 @@ namespace ChasingColors
                 // Modificar coordenadas del indicador que refleja el movimiento (Ellipse rojo)
                 PunteroL.SetValue(Canvas.TopProperty, lMano_Y - 12.5);
                 PunteroL.SetValue(Canvas.LeftProperty, lMano_X - 12.5);
+                ML.dPosX = lMano_X;
+                ML.dPosY = lMano_Y;
 
                 // Indicar Id de la persona que es trazada
                 LID.Content = skeleton.TrackingId;
             }
+
+            // COLISIONES CHECK
+            //Colision MR con Rojo
+            if (checarColision(O1, MR))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O1.dPosX = 1000.00;
+                puntos[0].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O3, MR))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O3.dPosX = 1000.00;
+                puntos[2].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O5, MR))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O5.dPosX = 1000.00;
+                puntos[4].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O7, MR))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O7.dPosX = 1000.00;
+                puntos[6].SetValue(Canvas.LeftProperty, 1000.00);
+            } 
+            //Colision con azules, pierde pts
+            if (checarColision(O2, MR))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O2.dPosX = 1000.00;
+                puntos[1].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O4, MR))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O4.dPosX = 1000.00;
+                puntos[3].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O6, MR))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O6.dPosX = 1000.00;
+                puntos[5].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O8, MR))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O8.dPosX = 1000.00;
+                puntos[7].SetValue(Canvas.LeftProperty, 1000.00);
+
+
+            //Colisiones Mano izquierda
+
+            if (checarColision(O1, ML))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O1.dPosX = 1000.00;
+                puntos[0].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O3, ML))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O3.dPosX = 1000.00;
+                puntos[2].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O5, ML))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O5.dPosX = 1000.00;
+                puntos[4].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O7, ML))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O7.dPosX = 1000.00;
+                puntos[6].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            //Colision con azules, pierde pts
+            if (checarColision(O2, ML))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O2.dPosX = 1000.00;
+                puntos[1].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O4, ML))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O4.dPosX = 1000.00;
+                puntos[3].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O6, ML))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O6.dPosX = 1000.00;
+                puntos[5].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+            if (checarColision(O8, ML))
+            {
+                SystemSounds.Hand.Play();       //Si	hay	colisión	emite	un	sonido
+                O8.dPosX = 1000.00;
+                puntos[7].SetValue(Canvas.LeftProperty, 1000.00);
+            }
+
+
         }
         /* ------------------------------------------------------------------------- */
 
