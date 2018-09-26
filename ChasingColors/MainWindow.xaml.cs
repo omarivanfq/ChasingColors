@@ -29,44 +29,111 @@ namespace ChasingColors
     public partial class MainWindow : Window
     {
         private KinectSensor miKinect;  //Representa el Kinect conectado
-        DispatcherTimer timer;
-
+        DispatcherTimer timerPuntos;
+        TimeSpan timeSpan = new TimeSpan();
+      //  DoubleAnimation[] animations = new DoubleAnimation[6];
+        Random random = new Random();
+        int timeSpanMS;
         /* ----------------------- Área para las variables ------------------------- */
         double dMano_X;            //Representa la coordenada X de la mano derecha
         double dMano_Y;            //Representa la coordenada Y de la mano derecha
         Point joint_Point = new Point(); //Permite obtener los datos del Joint
         /* ------------------------------------------------------------------------- */
 
-        Ellipse[] puntos = new Ellipse[4];
+        Ellipse[] puntos = new Ellipse[3];
         int puntoActual;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 0, 3);
-            timer.Tick += new EventHandler(Timer_Tick);
-            timer.IsEnabled = true;
+            initAnimations();
+
+            timerPuntos = new DispatcherTimer();
+            timeSpanMS = 2500;
+            timeSpan = new TimeSpan(0, 0, 0, 0, timeSpanMS);
+            timerPuntos.Interval = timeSpan;
+            timerPuntos.Tick += new EventHandler(Timer_Tick);
+            timerPuntos.IsEnabled = true;
 
             puntoActual = 0;
             setPuntos();
-
             Kinect_Config();
+        }
+
+        private void reaparecerPunto(Ellipse punto)
+        {
+            DoubleAnimation animation2 = new DoubleAnimation(1, TimeSpan.FromSeconds(0.001));
+            punto.BeginAnimation(Ellipse.OpacityProperty, animation2);
+        }
+
+        private void initAnimations()
+        {
+          /*  animations[0] = new DoubleAnimation();
+            animations[1] = new DoubleAnimation();
+            animations[2] = new DoubleAnimation();
+            animations[3] = new DoubleAnimation();
+            animations[4] = new DoubleAnimation();
+            animations[5] = new DoubleAnimation();*/
+        }
+
+        private void reacomodarPunto(int puntoIndex, int ms)
+        {
+            //DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
+            //punto.BeginAnimation(Ellipse.OpacityProperty, animation);
+
+            Ellipse punto = puntos[puntoIndex];
+
+            punto.Opacity = 1;//SetValue(Canvas.OpacityProperty, );
+    
+            double newX = random.Next(0, (int)(MainCanvas.Width - punto.Width));
+            double newY = random.Next(0, (int)(MainCanvas.Height - punto.Height));
+            punto.SetValue(Canvas.LeftProperty, newX);
+            punto.SetValue(Canvas.TopProperty, newY);
+            
+            if (punto.Opacity == 1)
+            {
+                DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
+              //  animations[puntoIndex] = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
+                animation.FillBehavior = FillBehavior.Stop;
+                punto.BeginAnimation(Ellipse.OpacityProperty, animation);
+            }
+            //  
+            punto.Opacity = 1;//SetValue(Canvas.OpacityProperty, );
+
+
+        }
+
+        private void Timer_Tick_Reaparece(object sender, EventArgs e)
+        {
         }
 
         private void setPuntos()
         {
             puntos[0] = red1;
-            puntos[1] = red1;
-            puntos[2] = red1;
-            puntos[3] = red1;
+            puntos[1] = blue2;
+            puntos[2] = red3;
+          /*  puntos[3] = blue1;
+            puntos[4] = red2;
+            puntos[5] = blue3;*/
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(4));
-            puntos[puntoActual].BeginAnimation(Ellipse.OpacityProperty, animation);
+            reacomodarPunto(puntoActual, timeSpanMS * 2);
+            puntoActual++;
+            if (puntoActual >= puntos.Length)
+            {
+                puntoActual = 0;
+            }
+            if (timeSpanMS - 50 > 0)
+            {
+                timeSpanMS -= 100;
+            }
+            timeSpan = new TimeSpan(0, 0, 0, 0, timeSpanMS);
+            timerPuntos.Interval = timeSpan;
+            //DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(4));
+            //puntos[puntoActual].BeginAnimation(Ellipse.OpacityProperty, animation);
         }
 
         /* -- Área para el método que utiliza los datos proporcionados por Kinect -- */
