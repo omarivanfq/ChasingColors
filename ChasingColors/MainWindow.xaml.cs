@@ -34,6 +34,10 @@ namespace ChasingColors
         /* ----------------------- Área para las variables ------------------------- */
         double dMano_X;            //Representa la coordenada X de la mano derecha
         double dMano_Y;            //Representa la coordenada Y de la mano derecha
+
+        double lMano_X;             //Representa la coordenada X de la mano izquierda
+        double lMano_Y;             //Representa la coordenada Y de la mano izquierda
+
         Point joint_Point = new Point(); //Permite obtener los datos del Joint
         /* ------------------------------------------------------------------------- */
 
@@ -76,6 +80,7 @@ namespace ChasingColors
         private void usarSkeleton(Skeleton skeleton)
         {
             Joint joint1 = skeleton.Joints[JointType.HandRight];
+            Joint joint2 = skeleton.Joints[JointType.HandLeft]; //Agregacion de leftHand
 
             // Si el Joint está listo obtener las coordenadas
             if (joint1.TrackingState == JointTrackingState.Tracked)
@@ -85,9 +90,25 @@ namespace ChasingColors
                 dMano_X = joint_Point.X;
                 dMano_Y = joint_Point.Y;
 
+
                 // Modificar coordenadas del indicador que refleja el movimiento (Ellipse rojo)
-                Puntero.SetValue(Canvas.TopProperty, dMano_Y - 12.5);
-                Puntero.SetValue(Canvas.LeftProperty, dMano_X - 12.5);
+                PunteroR.SetValue(Canvas.TopProperty, dMano_Y - 12.5);
+                PunteroR.SetValue(Canvas.LeftProperty, dMano_X - 12.5);
+
+                // Indicar Id de la persona que es trazada
+                LID.Content = skeleton.TrackingId;
+            }
+
+            if (joint2.TrackingState == JointTrackingState.Tracked)
+            {
+                // Obtener coordenadas
+                joint_Point = this.SkeletonPointToScreen(joint2.Position);
+                lMano_X = joint_Point.X;
+                lMano_Y = joint_Point.Y;
+
+                // Modificar coordenadas del indicador que refleja el movimiento (Ellipse rojo)
+                PunteroL.SetValue(Canvas.TopProperty, lMano_Y - 12.5);
+                PunteroL.SetValue(Canvas.LeftProperty, lMano_X - 12.5);
 
                 // Indicar Id de la persona que es trazada
                 LID.Content = skeleton.TrackingId;

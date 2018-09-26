@@ -8,7 +8,8 @@
                 Title="MainWindow" Height="735" Width="770" Closing="Window_Closing">
     <Grid>
         <Canvas Name="MainCanvas" Width="640" Height="480" Grid.Row="1" Background="Azure"  HorizontalAlignment="Center">
-            <Ellipse x:Name="Puntero" Width="35" Height="35" Canvas.Left="325" Canvas.Top="229" Fill="Black" ></Ellipse>
+            <Image x:Name="PunteroR" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="35" Source="Right.png" Canvas.Left="466" Canvas.Top="229"/>
+            <Image x:Name="PunteroL" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="35" Source="Left.png" Canvas.Left="79" Canvas.Top="229"/>
             <Ellipse x:Name="red1" Width="35" Height="35" Canvas.Left="308" Canvas.Top="10" Fill="Red" ></Ellipse>
             <Ellipse x:Name="red2" Width="35" Height="35" Canvas.Left="487" Canvas.Top="135" Fill="Red" ></Ellipse>
             <Ellipse x:Name="red3" Width="35" Height="35" Canvas.Left="191" Canvas.Top="147" Fill="Red" ></Ellipse>
