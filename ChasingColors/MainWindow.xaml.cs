@@ -29,7 +29,7 @@ namespace ChasingColors
     public partial class MainWindow : Window
     {
         private KinectSensor miKinect;  //Representa el Kinect conectado
-        DispatcherTimer timerColisiones, timer, timerGlobos;
+        DispatcherTimer timer;
 
         /* ----------------------- Área para las variables ------------------------- */
         double dMano_X;            //Representa la coordenada X de la mano derecha
@@ -37,18 +37,38 @@ namespace ChasingColors
         Point joint_Point = new Point(); //Permite obtener los datos del Joint
         /* ------------------------------------------------------------------------- */
 
+        Ellipse[] puntos = new Ellipse[4];
+        int puntoActual;
+
         public MainWindow()
         {
             InitializeComponent();
-            // Realizar configuraciones e iniciar el Kinect
-            DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(7));
-            red1.BeginAnimation(Ellipse.OpacityProperty, animation);
-             animation = new DoubleAnimation(0, TimeSpan.FromSeconds(5));
-            red2.BeginAnimation(Ellipse.OpacityProperty, animation);
-             animation = new DoubleAnimation(0, TimeSpan.FromSeconds(4));
-            red3.BeginAnimation(Ellipse.OpacityProperty, animation);
+
+            timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 0, 3);
+            timer.Tick += new EventHandler(Timer_Tick);
+            timer.IsEnabled = true;
+
+            puntoActual = 0;
+            setPuntos();
+
             Kinect_Config();
         }
+
+        private void setPuntos()
+        {
+            puntos[0] = red1;
+            puntos[1] = red1;
+            puntos[2] = red1;
+            puntos[3] = red1;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(4));
+            puntos[puntoActual].BeginAnimation(Ellipse.OpacityProperty, animation);
+        }
+
         /* -- Área para el método que utiliza los datos proporcionados por Kinect -- */
         /// <summary>
         /// Método que realiza las manipulaciones necesarias sobre el Skeleton trazado
