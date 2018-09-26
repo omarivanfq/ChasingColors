@@ -1,1 +1,16 @@
 C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\bin\Debug\ChasingColors.exe.config
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\bin\Debug\ChasingColors.exe
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\bin\Debug\ChasingColors.pdb
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\bin\Debug\Microsoft.Kinect.dll
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\bin\Debug\Microsoft.Kinect.xml
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\ChasingColors.csprojResolveAssemblyReference.cache
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\MainWindow.g.cs
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\App.g.cs
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\ChasingColors_MarkupCompile.cache
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\ChasingColors_MarkupCompile.lref
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\MainWindow.baml
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\ChasingColors.g.resources
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\ChasingColors.Properties.Resources.resources
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\ChasingColors.csproj.GenerateResource.Cache
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\ChasingColors.exe
+C:\Users\OmarIvanFQ\Desktop\AD2018\semanai\Proyecto\ChasingColors\ChasingColors\obj\Debug\ChasingColors.pdb

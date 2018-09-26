@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChasingColors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+                Title="MainWindow" Height="735" Width="770" Closing="Window_Closing">
     <Grid>
-        
+        <Canvas Name="MainCanvas" Width="640" Height="480" Grid.Row="1" Background="Azure"  HorizontalAlignment="Center">
+            <Ellipse x:Name="Puntero" Width="35" Height="35" Canvas.Left="308" Canvas.Top="10" Fill="Red" ></Ellipse>
+        </Canvas>
+        <Label x:Name="L1" Content="Estatus: " FontSize="15" FontWeight="Bold" Background="Bisque" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="61,628,0,0"/>
+        <Label x:Name="LEstatus" Content="Desconectado" FontSize="15" Foreground="#FFDA2828" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="141,628,0,0"/>
+        <Label x:Name="L3" Content="ID: " FontSize="15" FontWeight="Bold" Background="Bisque" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="305,628,0,0"/>
+        <Label x:Name="LID" Content="0" FontSize="15" Foreground="#FFDA2828" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="344,628,0,0"/>
     </Grid>
 </Window>
