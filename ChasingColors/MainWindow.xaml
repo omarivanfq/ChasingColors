@@ -10,14 +10,15 @@
         <Canvas Name="MainCanvas" Width="640" Height="480" Grid.Row="1" Background="Azure"  HorizontalAlignment="Center">
             <Image x:Name="PunteroR" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="35" Source="Right.png" Canvas.Left="466" Canvas.Top="229"/>
             <Image x:Name="PunteroL" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="35" Source="Left.png" Canvas.Left="79" Canvas.Top="229"/>
-            <Ellipse x:Name="red1" Width="35" Height="35" Canvas.Left="-318" Canvas.Top="148" Fill="Red" ></Ellipse>
-            <Ellipse x:Name="red2" Width="35" Height="35" Canvas.Left="809" Canvas.Top="149" Fill="Red" ></Ellipse>
-            <Ellipse x:Name="red3" Width="35" Height="35" Canvas.Left="961" Canvas.Top="-19" Fill="Red" ></Ellipse>
-            <Ellipse x:Name="red4" Width="35" Height="35" Canvas.Left="961" Canvas.Top="-19" Fill="Red" ></Ellipse>
-            <Ellipse x:Name="blue1" Width="35" Height="35" Canvas.Left="-318" Canvas.Top="148" Fill="Blue" ></Ellipse>
-            <Ellipse x:Name="blue2" Width="35" Height="35" Canvas.Left="809" Canvas.Top="149" Fill="Blue" ></Ellipse>
-            <Ellipse x:Name="blue3" Width="35" Height="35" Canvas.Left="961" Canvas.Top="-19" Fill="Blue" ></Ellipse>
-            <Ellipse x:Name="blue4" Width="35" Height="35" Canvas.Left="961" Canvas.Top="-19" Fill="Blue" ></Ellipse>
+            <Ellipse x:Name="red1" Width="35" Height="35" Canvas.Left="-654" Canvas.Top="6" Fill="Red" ></Ellipse>
+            <Ellipse x:Name="red2" Width="35" Height="35" Canvas.Left="887" Canvas.Top="65" Fill="Red" ></Ellipse>
+            <Ellipse x:Name="red3" Width="35" Height="35" Canvas.Left="807" Canvas.Top="-65" Fill="Red" ></Ellipse>
+            <Ellipse x:Name="red4" Width="35" Height="35" Canvas.Left="963" Canvas.Top="143" Fill="Red" ></Ellipse>
+            <Ellipse x:Name="blue1" Width="35" Height="35" Canvas.Left="-298" Canvas.Top="98" Fill="Blue" ></Ellipse>
+            <Ellipse x:Name="blue2" Width="35" Height="35" Canvas.Left="895" Canvas.Top="307" Fill="Blue" ></Ellipse>
+            <Ellipse x:Name="blue3" Width="35" Height="35" Canvas.Left="1081" Canvas.Top="89" Fill="Blue" ></Ellipse>
+            <Ellipse x:Name="blue4" Width="35" Height="35" Canvas.Left="887" Canvas.Top="-175" Fill="Blue" ></Ellipse>
+            <Label x:Name="ok" Content="" FontSize="15" FontWeight="Bold" Background="Bisque" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="25" Canvas.Top="432"/>
         </Canvas>
         <Label x:Name="L1" Content="Estatus: " FontSize="15" FontWeight="Bold" Background="Bisque" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="61,628,0,0"/>
         <Label x:Name="LEstatus" Content="Desconectado" FontSize="15" Foreground="#FFDA2828" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="141,628,0,0"/>

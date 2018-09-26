@@ -34,6 +34,15 @@ namespace ChasingColors
       //  DoubleAnimation[] animations = new DoubleAnimation[6];
         Random random = new Random();
         int timeSpanMS;
+
+        struct Ob
+        {
+            public double x;
+            public double y;
+            public double w;
+            public double h;
+        }
+
         /* ----------------------- Área para las variables ------------------------- */
         double dMano_X;            //Representa la coordenada X de la mano derecha
         double dMano_Y;            //Representa la coordenada Y de la mano derecha
@@ -62,6 +71,7 @@ namespace ChasingColors
 
             puntoActual = 0;
             setPuntos();
+            Console.WriteLine("okkkk");
             Kinect_Config();
         }
 
@@ -83,33 +93,23 @@ namespace ChasingColors
 
         private void reacomodarPunto(int puntoIndex, int ms)
         {
-            //DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
-            //punto.BeginAnimation(Ellipse.OpacityProperty, animation);
+            // Ellipse punto = puntos[puntoIndex];
 
-            Ellipse punto = puntos[puntoIndex];
-
-            punto.Opacity = 1;//SetValue(Canvas.OpacityProperty, );
-    
-            double newX = random.Next(0, (int)(MainCanvas.Width - punto.Width));
-            double newY = random.Next(0, (int)(MainCanvas.Height - punto.Height));
-            punto.SetValue(Canvas.LeftProperty, newX);
-            punto.SetValue(Canvas.TopProperty, newY);
+            puntos[puntoIndex].Opacity = 1;
+            double newX = random.Next(0, (int)(MainCanvas.Width - puntos[puntoIndex].Width));
+            double newY = random.Next(0, (int)(MainCanvas.Height - puntos[puntoIndex].Height));
+                puntos[puntoIndex].SetValue(Canvas.LeftProperty, newX);
+                puntos[puntoIndex].SetValue(Canvas.TopProperty, newY);
             
-            if (punto.Opacity == 1)
+            if (puntos[puntoIndex].Opacity == 1)
             {
                 DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
-              //  animations[puntoIndex] = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
                 animation.FillBehavior = FillBehavior.Stop;
-                punto.BeginAnimation(Ellipse.OpacityProperty, animation);
+                puntos[puntoIndex].BeginAnimation(Ellipse.OpacityProperty, animation);
             }
-            //  
-            punto.Opacity = 1;//SetValue(Canvas.OpacityProperty, );
 
+            puntos[puntoIndex].Opacity = 1;
 
-        }
-
-        private void Timer_Tick_Reaparece(object sender, EventArgs e)
-        {
         }
 
         private void setPuntos()
@@ -122,8 +122,9 @@ namespace ChasingColors
             puntos[5] = blue3;
             puntos[6] = red4;
             puntos[7] = blue4;
-
         }
+
+     
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -133,14 +134,12 @@ namespace ChasingColors
             {
                 puntoActual = 0;
             }
-            if (timeSpanMS - 50 > 0)
+            if (timeSpanMS - 25 > 600)
             {
                 timeSpanMS -= 100;
             }
             timeSpan = new TimeSpan(0, 0, 0, 0, timeSpanMS);
             timerPuntos.Interval = timeSpan;
-            //DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(4));
-            //puntos[puntoActual].BeginAnimation(Ellipse.OpacityProperty, animation);
         }
 
         /* -- Área para el método que utiliza los datos proporcionados por Kinect -- */
@@ -159,7 +158,6 @@ namespace ChasingColors
                 joint_Point = this.SkeletonPointToScreen(joint1.Position);
                 dMano_X = joint_Point.X;
                 dMano_Y = joint_Point.Y;
-
 
                 // Modificar coordenadas del indicador que refleja el movimiento (Ellipse rojo)
                 PunteroR.SetValue(Canvas.TopProperty, dMano_Y - 12.5);
