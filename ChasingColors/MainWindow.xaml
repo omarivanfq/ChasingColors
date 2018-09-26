@@ -8,7 +8,10 @@
                 Title="MainWindow" Height="735" Width="770" Closing="Window_Closing">
     <Grid>
         <Canvas Name="MainCanvas" Width="640" Height="480" Grid.Row="1" Background="Azure"  HorizontalAlignment="Center">
-            <Ellipse x:Name="Puntero" Width="35" Height="35" Canvas.Left="308" Canvas.Top="10" Fill="Red" ></Ellipse>
+            <Ellipse x:Name="Puntero" Width="35" Height="35" Canvas.Left="325" Canvas.Top="229" Fill="Black" ></Ellipse>
+            <Ellipse x:Name="red1" Width="35" Height="35" Canvas.Left="308" Canvas.Top="10" Fill="Red" ></Ellipse>
+            <Ellipse x:Name="red2" Width="35" Height="35" Canvas.Left="487" Canvas.Top="135" Fill="Red" ></Ellipse>
+            <Ellipse x:Name="red3" Width="35" Height="35" Canvas.Left="191" Canvas.Top="147" Fill="Red" ></Ellipse>
         </Canvas>
         <Label x:Name="L1" Content="Estatus: " FontSize="15" FontWeight="Bold" Background="Bisque" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="61,628,0,0"/>
         <Label x:Name="LEstatus" Content="Desconectado" FontSize="15" Foreground="#FFDA2828" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="141,628,0,0"/>

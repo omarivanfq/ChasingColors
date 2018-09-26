@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
 using System.IO;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace ChasingColors
 {
@@ -27,6 +29,7 @@ namespace ChasingColors
     public partial class MainWindow : Window
     {
         private KinectSensor miKinect;  //Representa el Kinect conectado
+        DispatcherTimer timerColisiones, timer, timerGlobos;
 
         /* ----------------------- Área para las variables ------------------------- */
         double dMano_X;            //Representa la coordenada X de la mano derecha
@@ -38,6 +41,12 @@ namespace ChasingColors
         {
             InitializeComponent();
             // Realizar configuraciones e iniciar el Kinect
+            DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(7));
+            red1.BeginAnimation(Ellipse.OpacityProperty, animation);
+             animation = new DoubleAnimation(0, TimeSpan.FromSeconds(5));
+            red2.BeginAnimation(Ellipse.OpacityProperty, animation);
+             animation = new DoubleAnimation(0, TimeSpan.FromSeconds(4));
+            red3.BeginAnimation(Ellipse.OpacityProperty, animation);
             Kinect_Config();
         }
         /* -- Área para el método que utiliza los datos proporcionados por Kinect -- */
