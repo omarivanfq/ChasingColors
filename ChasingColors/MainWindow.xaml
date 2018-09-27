@@ -8,17 +8,23 @@
                 Title="MainWindow" Height="735" Width="770" Closing="Window_Closing">
     <Grid>
         <Canvas Name="MainCanvas" Width="640" Height="480" Grid.Row="1" Background="Azure"  HorizontalAlignment="Center">
+            <Label x:Name="gameover" Content="Game Over" FontSize="70" FontWeight="Bold" Foreground="White" Background="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Opacity="0" Canvas.Left="129" Canvas.Top="170" Height="120" Width="380"/>
             <Image x:Name="PunteroR" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="35" Source="Right.png" Canvas.Left="466" Canvas.Top="229"/>
             <Image x:Name="PunteroL" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="35" Source="Left.png" Canvas.Left="79" Canvas.Top="229"/>
-            <Ellipse x:Name="red1" Width="35" Height="35" Canvas.Left="-654" Canvas.Top="6" Fill="Red" ></Ellipse>
-            <Ellipse x:Name="red2" Width="35" Height="35" Canvas.Left="887" Canvas.Top="65" Fill="Red" ></Ellipse>
-            <Ellipse x:Name="red3" Width="35" Height="35" Canvas.Left="807" Canvas.Top="-65" Fill="Red" ></Ellipse>
-            <Ellipse x:Name="red4" Width="35" Height="35" Canvas.Left="963" Canvas.Top="143" Fill="Red" ></Ellipse>
-            <Ellipse x:Name="blue1" Width="35" Height="35" Canvas.Left="-298" Canvas.Top="98" Fill="Blue" ></Ellipse>
-            <Ellipse x:Name="blue2" Width="35" Height="35" Canvas.Left="895" Canvas.Top="307" Fill="Blue" ></Ellipse>
-            <Ellipse x:Name="blue3" Width="35" Height="35" Canvas.Left="1081" Canvas.Top="89" Fill="Blue" ></Ellipse>
-            <Ellipse x:Name="blue4" Width="35" Height="35" Canvas.Left="887" Canvas.Top="-175" Fill="Blue" ></Ellipse>
-            <Label x:Name="ok" Content="" FontSize="15" FontWeight="Bold" Background="Bisque" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="25" Canvas.Top="432"/>
+            <Ellipse x:Name="red1" Width="35" Height="35" Canvas.Left="-156" Canvas.Top="168" Fill="Red" Opacity="0"></Ellipse>
+            <Ellipse x:Name="red2" Width="35" Height="35" Canvas.Left="741" Canvas.Top="101" Fill="Red" Opacity="0"></Ellipse>
+            <Ellipse x:Name="red3" Width="35" Height="35" Canvas.Left="741" Canvas.Top="-53" Fill="Red" Opacity="0"></Ellipse>
+            <Ellipse x:Name="red4" Width="35" Height="35" Canvas.Left="745" Canvas.Top="287" Fill="Red" Opacity="0"></Ellipse>
+            <Ellipse x:Name="blue1" Width="35" Height="35" Canvas.Left="-162" Canvas.Top="30" Fill="Blue" Opacity="0"></Ellipse>
+            <Ellipse x:Name="blue2" Width="35" Height="35" Canvas.Left="749" Canvas.Top="201" Fill="Blue" Opacity="0"></Ellipse>
+            <Ellipse x:Name="blue3" Width="35" Height="35" Canvas.Left="747" Canvas.Top="387" Fill="Blue" Opacity="0"></Ellipse>
+            <Ellipse x:Name="blue4" Width="35" Height="35" Canvas.Left="747" Canvas.Top="19" Fill="Blue" Opacity="0"></Ellipse>
+            <Label x:Name="puntaje" Width="142"  Content="Puntaje: 0" FontSize="25" Foreground="#514e4e" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="426"/>
+            <Image x:Name="vida1" Source="heart.png" Height="28" Width="25" Canvas.Left="414" Canvas.Top="443" Opacity="0.6"/>
+            <Image x:Name="vida2" Source="heart.png" Height="28" Width="25" Canvas.Left="452" Canvas.Top="442" Opacity="0.6"/>
+            <Image x:Name="vida3" Source="heart.png" Height="28" Width="25" Canvas.Left="491" Canvas.Top="442" Opacity="0.6"/>
+            <Image x:Name="vida4" Source="heart.png" Height="28" Width="25" Canvas.Left="531" Canvas.Top="442" Opacity="0.6"/>
+            <Image x:Name="vida5" Source="heart.png" Height="28" Width="25" Canvas.Left="569" Canvas.Top="442" Opacity="0.6"/>
         </Canvas>
         <Label x:Name="L1" Content="Estatus: " FontSize="15" FontWeight="Bold" Background="Bisque" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="61,628,0,0"/>
         <Label x:Name="LEstatus" Content="Desconectado" FontSize="15" Foreground="#FFDA2828" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="141,628,0,0"/>

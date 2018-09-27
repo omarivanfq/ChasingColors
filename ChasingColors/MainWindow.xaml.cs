@@ -16,32 +16,51 @@ using Microsoft.Kinect;
 using System.IO;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using System.Media;
 
 namespace ChasingColors
 {
-    /// <summary>
-    /// Capítulo: Reflejar el movimiento con imágenes
-    /// Ejemplo: Obtener la posición de la mano derecha (De cualquier persona, no se selecciona cual)
-    /// Descripción: 
-    ///              Este sencillo ejemplo muestra una ventana con un círculo del cual, su movimiento, refleja el 
-    ///              movimiento de la mano derecha. Conforme se mueve la mano se mueve el círculo.
-    /// </summary>
+   
     public partial class MainWindow : Window
     {
-        private KinectSensor miKinect;  //Representa el Kinect conectado
-        DispatcherTimer timerPuntos;
+
+        struct Obj
+        {
+            public double dPosX;
+            public double dPosY;
+            public double dAlto;
+            public double dAncho;
+        }
+
+        Obj[] puntosObj = new Obj[8];
+        Obj manoDerecha, manoIzquierda;
+        SolidColorBrush colorIzquierda = Brushes.Blue;
+        SolidColorBrush colorDerecha = Brushes.Red;
+
+        int puntajeContador;
+
+        private bool checarColision(Obj ob1, Obj ob2)
+        {
+            if (ob1.dPosX + ob1.dAncho < ob2.dPosX)    
+                return false;
+            if (ob1.dPosY + ob1.dAlto < ob2.dPosY)  
+                return false;
+            if (ob1.dPosY > ob2.dPosY + ob2.dAlto)  
+                return false;
+            if (ob1.dPosX > ob2.dPosX + ob2.dAncho) 
+                return false;
+            return true;
+        }
+        
+        private KinectSensor miKinect;  
+        DispatcherTimer timerPuntos, timerDisponibles, timerAceleracion;
         TimeSpan timeSpan = new TimeSpan();
-      //  DoubleAnimation[] animations = new DoubleAnimation[6];
         Random random = new Random();
         int timeSpanMS;
+        int vidas;
 
-        struct Ob
-        {
-            public double x;
-            public double y;
-            public double w;
-            public double h;
-        }
+        Queue<int> disponibles;
+        Stack<Image> vidasImg;
 
         /* ----------------------- Área para las variables ------------------------- */
         double dMano_X;            //Representa la coordenada X de la mano derecha
@@ -54,13 +73,11 @@ namespace ChasingColors
         /* ------------------------------------------------------------------------- */
 
         Ellipse[] puntos = new Ellipse[8];
-        int puntoActual;
+        int desapareceIndex;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            initAnimations();
 
             timerPuntos = new DispatcherTimer();
             timeSpanMS = 2500;
@@ -69,77 +86,140 @@ namespace ChasingColors
             timerPuntos.Tick += new EventHandler(Timer_Tick);
             timerPuntos.IsEnabled = true;
 
-            puntoActual = 0;
+            timerAceleracion = new DispatcherTimer();
+            timerAceleracion.Interval = new TimeSpan(0, 0, 0, 0, 5000);
+            timerAceleracion.Tick += new EventHandler(Timer_Tick_Acelerar);
+            timerAceleracion.IsEnabled = true;
+            
+            disponibles = new Queue<int>();
             setPuntos();
-            Console.WriteLine("okkkk");
+            setVidasImg();
             Kinect_Config();
+
+            for (int i = 0; i < puntos.Length; i++)
+            {
+                puntosObj[i].dAlto = puntos[i].Height;
+                puntosObj[i].dAncho = puntos[i].Width;
+            }
+
+            manoDerecha.dPosX = (double)PunteroR.GetValue(Canvas.LeftProperty);
+            manoDerecha.dPosY = (double)PunteroR.GetValue(Canvas.TopProperty);
+            manoDerecha.dAlto = PunteroR.Height;
+            manoDerecha.dAncho = PunteroR.Width;
+            manoIzquierda.dPosX = (double)PunteroL.GetValue(Canvas.LeftProperty);
+            manoIzquierda.dPosY = (double)PunteroL.GetValue(Canvas.TopProperty);
+            manoIzquierda.dAlto = PunteroL.Height;
+            manoIzquierda.dAncho = PunteroL.Width;
+
+            vidas = 5;
+            puntajeContador = 0;
         }
 
-        private void reaparecerPunto(Ellipse punto)
+        private void setVidasImg()
         {
-            DoubleAnimation animation2 = new DoubleAnimation(1, TimeSpan.FromSeconds(0.001));
-            punto.BeginAnimation(Ellipse.OpacityProperty, animation2);
+            vidasImg = new Stack<Image>();
+            vidasImg.Push(vida1);
+            vidasImg.Push(vida2);
+            vidasImg.Push(vida3);
+            vidasImg.Push(vida4);
+            vidasImg.Push(vida5);
         }
 
-        private void initAnimations()
+        private void Timer_Tick_Acelerar(object sender, EventArgs e)
         {
-          /*  animations[0] = new DoubleAnimation();
-            animations[1] = new DoubleAnimation();
-            animations[2] = new DoubleAnimation();
-            animations[3] = new DoubleAnimation();
-            animations[4] = new DoubleAnimation();
-            animations[5] = new DoubleAnimation();*/
+            if (timeSpanMS - 100 > 100)
+                timeSpanMS -= 100;
+            timeSpan = new TimeSpan(0, 0, 0, 0, timeSpanMS);
+            timerPuntos.Interval = timeSpan;
+        }
+
+        private bool colisionaConOtrosPuntos(int puntoIndex)
+        {
+            for (int i = 0; i < puntosObj.Length; i++)
+                if (i != puntoIndex && checarColision(puntosObj[puntoIndex], puntosObj[i]))
+                 return true;
+            return false;
+        }
+
+        private bool colisionaConManos(int puntoIndex)
+        {
+            if (checarColision(puntosObj[puntoIndex], manoIzquierda)
+                 || checarColision(puntosObj[puntoIndex], manoDerecha))
+                return true;
+            return false;
+        }
+
+        private void pierdeVida()
+        {
+            if (vidas > 0)
+            {
+                vidasImg.Pop().Opacity = 0;
+                vidas--;
+            }
+            else
+            {
+                gameover.Opacity = 1;
+            }
+        }
+
+        private void desaparecePunto(object sender, EventArgs e, int puntoIndex)
+        {
+            if (puntosObj[puntoIndex].dPosX != -MainCanvas.Width * 1.2) 
+                pierdeVida();
+            puntos[puntoIndex].SetValue(Canvas.LeftProperty, MainCanvas.Width * 1.2);
+            puntosObj[puntoIndex].dPosX = MainCanvas.Width * 1.2;
+            puntos[puntoIndex].Opacity = 0;
+            disponibles.Enqueue(puntoIndex);
+            (sender as DispatcherTimer).Stop();
         }
 
         private void reacomodarPunto(int puntoIndex, int ms)
         {
-            // Ellipse punto = puntos[puntoIndex];
-
-            puntos[puntoIndex].Opacity = 1;
-            double newX = random.Next(0, (int)(MainCanvas.Width - puntos[puntoIndex].Width));
-            double newY = random.Next(0, (int)(MainCanvas.Height - puntos[puntoIndex].Height));
-                puntos[puntoIndex].SetValue(Canvas.LeftProperty, newX);
-                puntos[puntoIndex].SetValue(Canvas.TopProperty, newY);
-            
-            if (puntos[puntoIndex].Opacity == 1)
+            if (puntos[puntoIndex].Opacity == 0)
             {
+                puntos[puntoIndex].Opacity = 1;
+                do
+                {
+                    double newX = random.Next(0, (int)(MainCanvas.Width - puntos[puntoIndex].Width));
+                    double newY = random.Next(0, (int)(MainCanvas.Height - puntos[puntoIndex].Height));
+                    puntos[puntoIndex].SetValue(Canvas.LeftProperty, newX);
+                    puntos[puntoIndex].SetValue(Canvas.TopProperty, newY);
+                    puntosObj[puntoIndex].dPosX = newX;
+                    puntosObj[puntoIndex].dPosY = newY;
+                } while (colisionaConOtrosPuntos(puntoIndex) || colisionaConManos(puntoIndex));
+
                 DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(ms / 1000.0));
                 animation.FillBehavior = FillBehavior.Stop;
-                puntos[puntoIndex].BeginAnimation(Ellipse.OpacityProperty, animation);
+                puntos[puntoIndex].BeginAnimation(OpacityProperty, animation);
+
+                DispatcherTimer timerDesaparece = new DispatcherTimer();
+                timerDesaparece.Interval = new TimeSpan(0, 0, 0, 0, ms - 20);
+                timerDesaparece.Tick += (sender, e) => desaparecePunto(sender, e, puntoIndex);
+                timerDesaparece.IsEnabled = true;
             }
-
-            puntos[puntoIndex].Opacity = 1;
-
         }
 
         private void setPuntos()
         {
             puntos[0] = red1;
-            puntos[1] = red2;
-            puntos[2] = red3;
-            puntos[3] = blue1;
-            puntos[4] = red2;
+            puntos[1] = blue1;
+            puntos[2] = red2;
+            puntos[3] = blue2;
+            puntos[4] = red3;
             puntos[5] = blue3;
             puntos[6] = red4;
             puntos[7] = blue4;
+            for (int i = 0; i < puntos.Length; i++)
+                disponibles.Enqueue(i);
         }
-
-     
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            reacomodarPunto(puntoActual, timeSpanMS * 2);
-            puntoActual++;
-            if (puntoActual >= puntos.Length)
+            if (disponibles.ToArray().Length > 0)
             {
-                puntoActual = 0;
+                int puntoActual = disponibles.Dequeue();
+                reacomodarPunto(puntoActual, timeSpanMS * 5);
             }
-            if (timeSpanMS - 25 > 600)
-            {
-                timeSpanMS -= 100;
-            }
-            timeSpan = new TimeSpan(0, 0, 0, 0, timeSpanMS);
-            timerPuntos.Interval = timeSpan;
         }
 
         /* -- Área para el método que utiliza los datos proporcionados por Kinect -- */
@@ -162,6 +242,8 @@ namespace ChasingColors
                 // Modificar coordenadas del indicador que refleja el movimiento (Ellipse rojo)
                 PunteroR.SetValue(Canvas.TopProperty, dMano_Y - 12.5);
                 PunteroR.SetValue(Canvas.LeftProperty, dMano_X - 12.5);
+                manoDerecha.dPosX = dMano_X;
+                manoDerecha.dPosY = dMano_Y;
 
                 // Indicar Id de la persona que es trazada
                 LID.Content = skeleton.TrackingId;
@@ -177,35 +259,69 @@ namespace ChasingColors
                 // Modificar coordenadas del indicador que refleja el movimiento (Ellipse rojo)
                 PunteroL.SetValue(Canvas.TopProperty, lMano_Y - 12.5);
                 PunteroL.SetValue(Canvas.LeftProperty, lMano_X - 12.5);
+                manoIzquierda.dPosX = lMano_X;
+                manoIzquierda.dPosY = lMano_Y;
 
                 // Indicar Id de la persona que es trazada
                 LID.Content = skeleton.TrackingId;
             }
+
+            // COLISIONES CHECK
+            //Colision MR con Rojo
+
+            for (int i = 0; i < puntos.Length; i++)
+            {
+                if (checarColision(puntosObj[i], manoDerecha))
+                {
+                    SystemSounds.Hand.Play();
+                    puntosObj[i].dPosX = -MainCanvas.Width * 1.2;
+                    puntos[i].SetValue(Canvas.LeftProperty, -MainCanvas.Width * 1.2);
+                    puntos[i].Opacity = 0;
+                    disponibles.Enqueue(i);
+                    if (puntos[i].Fill == colorDerecha)
+                    {
+                        puntajeContador++;
+                    }
+                    else
+                    {
+                        puntajeContador--;
+                    }
+                    puntaje.Content = "Puntaje: " + puntajeContador;
+                }
+
+                if (checarColision(puntosObj[i], manoIzquierda))
+                {
+                    SystemSounds.Hand.Play();
+                    puntosObj[i].dPosX = -MainCanvas.Width * 1.2; ;
+                    puntos[i].SetValue(Canvas.LeftProperty, -MainCanvas.Width * 1.2);
+                    puntos[i].Opacity = 0;
+                    disponibles.Enqueue(i);
+                    if (puntos[i].Fill == colorIzquierda)
+                    {
+                        puntajeContador++;
+                    }
+                    else
+                    {
+                        puntajeContador--;
+                    }
+                    puntaje.Content = "Puntaje: " + puntajeContador;
+                }
+            }
+             
         }
+
         /* ------------------------------------------------------------------------- */
 
         /* --------------------------- Métodos Nuevos ------------------------------ */
-
-        /// <summary>
-        /// Metodo que convierte un "SkeletonPoint" a "DepthSpace", esto nos permite poder representar las coordenadas de los Joints
-        /// en nuestra ventana en las dimensiones deseadas.
-        /// </summary>
+   
         private Point SkeletonPointToScreen(SkeletonPoint skelpoint)
         {
-            // Convertertir un punto a "Depth Space" en una resolución de 640x480
             DepthImagePoint depthPoint = this.miKinect.CoordinateMapper.MapSkeletonPointToDepthPoint(skelpoint, DepthImageFormat.Resolution640x480Fps30);
             return new Point(depthPoint.X, depthPoint.Y);
         }
         /* ------------------------------------------------------------------------- */
-
-        /// <summary>
-        /// Método que realiza las configuraciones necesarias en el Kinect 
-        /// así también inicia el Kinect para el envío de datos
-        /// </summary>
         private void Kinect_Config()
         {
-            // Buscamos el Kinect conectado con la propiedad KinectSensors, al descubrir el primero con el estado Connected
-            // se asigna a la variable miKinect que lo representará (KinectSensor miKinect)
             miKinect = KinectSensor.KinectSensors.FirstOrDefault(s => s.Status == KinectStatus.Connected);
 
             if (this.miKinect != null && !this.miKinect.IsRunning)

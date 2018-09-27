@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("left.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("right.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("heart.png")]
 
 
